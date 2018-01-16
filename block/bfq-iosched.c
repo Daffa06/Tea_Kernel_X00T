@@ -2163,7 +2163,7 @@ bfq_merge_bfqqs(struct bfq_data *bfqd, struct bfq_io_cq *bic,
 	bfq_put_queue(bfqq);
 }
 
-static int bfq_allow_bio_merge(struct request_queue *q, struct request *rq,
+static int bfq_allow_merge(struct request_queue *q, struct request *rq,
 			   struct bio *bio)
 {
 	struct bfq_data *bfqd = q->elevator->elevator_data;
