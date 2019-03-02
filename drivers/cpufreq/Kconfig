@@ -302,6 +302,21 @@ config MAX_BOOST_FREQ_PERF
 	  Max-boost frequency for the performance CPU cluster.
 
 endif
+config CPU_UNDERCLOCK_FREQ_HP
+	int "Performance cluster underclock freq"
+	default "0"
+	help
+	  CPU underclock frequency for the performance CPU cluster.
+
+config CPU_UNDERCLOCK_FREQ_LP
+	int "Low-power cluster underclock freq"
+	default "0"
+	help
+	  CPU underclock frequency for the low-power CPU cluster.
+
+config CPU_INPUT_BOOST
+	bool "CPU Input Boost"
+
 
 comment "CPU frequency scaling drivers"
 
