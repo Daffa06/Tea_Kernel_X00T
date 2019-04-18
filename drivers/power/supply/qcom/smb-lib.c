@@ -3523,13 +3523,13 @@ int smbchg_jeita_judge_state(int old_State, int batt_tempr)
 	/* 0 <= batt_tempr < 10 */
 	} else if (batt_tempr < 100) {
 		result_State = JEITA_STATE_RANGE_0_to_100;
-	/* 10 <= batt_tempr < 55 */
-	} else if (batt_tempr < 550) {
+	/* 10 <= batt_tempr < 58 */
+	} else if (batt_tempr < 580) {
 		result_State = JEITA_STATE_RANGE_100_to_500;
-	/* 55 <= batt_tempr < 58 */
-	//} else if (batt_tempr < 580) {
+	/* 58 <= batt_tempr < 62 */
+	//} else if (batt_tempr < 620) {
 		//result_State = JEITA_STATE_RANGE_100_to_500;
-	/* 58 <= batt_tempr */
+	/* 62 <= batt_tempr */
 	} else
 		result_State = JEITA_STATE_LARGER_THAN_600;
 
