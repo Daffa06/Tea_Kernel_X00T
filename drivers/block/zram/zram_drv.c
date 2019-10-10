@@ -51,6 +51,15 @@ static const char *default_compressor = CONFIG_ZRAM_DEFAULT_COMPRESSOR;
 #define BACKEND_PAR_BUF_SIZE	32
 static char backend_par_buf[BACKEND_PAR_BUF_SIZE];
 
+/*
+ * We don't need to see memory allocation errors more than once every 1
+ * second to know that a problem is occurring.
+ */
+#define ALLOC_ERROR_LOG_RATE_MS 1000
+
+#define BACKEND_PAR_BUF_SIZE	32
+static char backend_par_buf[BACKEND_PAR_BUF_SIZE];
+
 /* Module params (documentation at end) */
 static unsigned int num_devices = 1;
 /*
@@ -937,7 +946,7 @@ static bool zram_meta_alloc(struct zram *zram, u64 disksize)
 	if (!zram->table)
 		return false;
 
-	backend = strlen(backend_par_buf) ? backend_par_buf : CONFIG_ZRAM_DEFAULT_BACKEND;
+	backend = strlen(backend_par_buf) ? backend_par_buf : "zsmalloc";
 	zram->mem_pool = zpool_create_pool(backend, zram->disk->disk_name,
 					GFP_NOIO, NULL);
 	if (!zram->mem_pool) {
