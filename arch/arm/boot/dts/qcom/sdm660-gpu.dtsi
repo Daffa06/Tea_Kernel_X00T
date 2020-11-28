@@ -560,7 +560,7 @@
 
 				qcom,initial-pwrlevel = <4>;
 
-                                /* NOM */
+                                /* NOM_L1 */
                                 qcom,gpu-pwrlevel@0 {
                                         reg = <0>;
                                         qcom,gpu-freq = <588000000>;
@@ -569,7 +569,7 @@
                                         qcom,bus-max = <12>;
                                 };
    
-                                /* SVS_L1 */
+                                /* NOM */
                                 qcom,gpu-pwrlevel@1 {
                                         reg = <1>;
                                         qcom,gpu-freq = <465000000>;
