@@ -1,8 +1,8 @@
 config ZRAM
 	tristate "Compressed RAM block device support"
 	depends on BLOCK && SYSFS && CRYPTO
-	select CRYPTO_LZO
-	select ZPOOL
+	depends on CRYPTO_842 || CRYPTO_LZ4 || CRYPTO_LZ4HC || CRYPTO_LZO || CRYPTO_ZSTD
+	depends on ZPOOL && (Z3FOLD || ZSMALLOC)
 	default n
 	help
 	  Creates virtual block devices called /dev/zramX (X = 0, 1, ...).
