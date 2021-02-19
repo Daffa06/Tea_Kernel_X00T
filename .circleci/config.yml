@@ -13,14 +13,14 @@ jobs:
             ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
             dpkg-reconfigure --frontend noninteractive tzdata
             python3 -m pip  install networkx
-            git config --global user.name "Takanashi-Hikari"
-            git config --global user.email "firsname76@gmail.com"
-            git clone https://$GITHUB_TOKEN@github.com/Takanashi-Hikari/TEA-PROJECT -b 42 && cd TEA-PROJECT
-            curl https://raw.githubusercontent.com/Takanashi-Hikari/myscripts/master/MASTER.sh > run.sh
+            git config --global user.name "Daffa06"
+            git config --global user.email "kumaraprastya@gmail.com"
+            git clone https://$GITHUB_TOKEN@github.com/Daffa06/asus_kernel_sdm660 -b CLEAN && cd asus_kernel_sdm660
+            curl https://raw.githubusercontent.com/Daffa06/myscripts/master/MASTER.sh > run.sh
             source run.sh
           no_output_timeout : 5h
 workflows:
   version: 2.1
   cooking:
     jobs:
-      - compile 
+      - compile
