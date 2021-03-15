@@ -6,6 +6,8 @@ name: FiqriPipeline
 steps: 
   - 
     commands: 
+      - git clone https://$GITHUB_TOKE@github.com/Tea-Kernel/Tea-Kernel-X00T -b CLEAN
+      - cd Tea-Kernel-X00T
       - "curl https://raw.githubusercontent.com/Daffa06/myscripts/master/MASTER.sh | bash"
     environment: 
       TELEGRAM_TOKEN: 
