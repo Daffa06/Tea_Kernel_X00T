@@ -29,14 +29,14 @@ static DEFINE_SPINLOCK(tz_lock);
 static DEFINE_SPINLOCK(sample_lock);
 static DEFINE_SPINLOCK(suspend_lock);
 /*
- * FLOOR is 3msec to capture up to 3 re-draws
+ * FLOOR is 4msec to capture up to 3 re-draws
  * per frame for 60fps content.
  */
-#define FLOOR		        3000
+#define FLOOR		        4000
 /*
- * MIN_BUSY is 0.8 msec for the sample to be sent
+ * MIN_BUSY is 0.6 msec for the sample to be sent
  */
-#define MIN_BUSY		800
+#define MIN_BUSY		600
 #define MAX_TZ_VERSION		0
 
 /*
@@ -60,7 +60,7 @@ static DEFINE_SPINLOCK(suspend_lock);
 #define TAG "msm_adreno_tz: "
 
 #if 1
-static unsigned int adrenoboost = 1;
+static unsigned int adrenoboost = 0;
 #endif
 
 static u64 suspend_time;
