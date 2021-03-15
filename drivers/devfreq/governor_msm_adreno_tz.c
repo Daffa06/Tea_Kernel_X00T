@@ -34,16 +34,16 @@ static DEFINE_SPINLOCK(suspend_lock);
  */
 #define FLOOR		        3000
 /*
- * MIN_BUSY is 1 msec for the sample to be sent
+ * MIN_BUSY is 0.8 msec for the sample to be sent
  */
-#define MIN_BUSY		1000
+#define MIN_BUSY		800
 #define MAX_TZ_VERSION		0
 
 /*
- * CEILING is 20msec, larger than any standard
+ * CEILING is 30msec, larger than any standard
  * frame length, but less than the idle timer.
  */
-#define CEILING			20000
+#define CEILING			30000
 #define TZ_RESET_ID		0x3
 #define TZ_UPDATE_ID		0x4
 #define TZ_INIT_ID		0x6
