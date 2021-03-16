@@ -34,9 +34,9 @@ static DEFINE_SPINLOCK(suspend_lock);
  */
 #define FLOOR		        4000
 /*
- * MIN_BUSY is 0.8 msec for the sample to be sent
+ * MIN_BUSY is 0.9 msec for the sample to be sent
  */
-#define MIN_BUSY		800
+#define MIN_BUSY		900
 #define MAX_TZ_VERSION		0
 
 /*
