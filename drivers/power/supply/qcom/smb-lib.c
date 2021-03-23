@@ -3522,12 +3522,12 @@ int smbchg_jeita_judge_state(int old_State, int batt_tempr)
 	/* 0 <= batt_tempr < 10 */
 	} else if (batt_tempr < 100) {
 		result_State = JEITA_STATE_RANGE_0_to_100;
-	/* 10 <= batt_tempr < 50 */
-	} else if (batt_tempr < 500) {
+	/* 10 <= batt_tempr < 55 */
+	} else if (batt_tempr < 550) {
 		result_State = JEITA_STATE_RANGE_100_to_500;
-	/* 50 <= batt_tempr < 60 */
-	} else if (batt_tempr < 600) {
-		result_State = JEITA_STATE_RANGE_100_to_500;
+	/* 55 <= batt_tempr < 60 */
+	//} else if (batt_tempr < 600) {
+		//result_State = JEITA_STATE_RANGE_100_to_500;
 	/* 60 <= batt_tempr */
 	} else
 		result_State = JEITA_STATE_LARGER_THAN_600;
@@ -3750,7 +3750,7 @@ void jeita_rule(void)
 		break;
 	}
 
-	if (smartchg_stop_flag) {
+	if (smartchg_stop_flag || smartchg_stop_flag) {
 		pr_debug("%s: Stop charging, smart = %d\n", __func__,
 				smartchg_stop_flag);
 		charging_enable = EN_BAT_CHG_EN_COMMAND_FALSE;
@@ -3849,7 +3849,7 @@ void asus_chg_flow_work(struct work_struct *work)
 			pr_err("%s: Couldn't read fast_CURRENT_LIMIT_CFG_REG\n",
 				__func__);
 
-		set_icl = ICL_500mA;
+		set_icl = ICL_3000mA;
 
 		rc = smblib_masked_write(smbchg_dev,
 						USBIN_CURRENT_LIMIT_CFG_REG,
@@ -3892,7 +3892,7 @@ void asus_chg_flow_work(struct work_struct *work)
 
 	case OCP_CHARGER_BIT:
 		/* reg=1370 bit7-bit0 */
-		set_icl = ICL_1500mA;
+		set_icl = ICL_3000mA;
 
 		rc = smblib_masked_write(smbchg_dev,
 						USBIN_CURRENT_LIMIT_CFG_REG,
@@ -3919,7 +3919,7 @@ void asus_chg_flow_work(struct work_struct *work)
 				__func__);
 
 		/* reg=1370 bit7-bit0 */
-		set_icl = ICL_1500mA;
+		set_icl = ICL_3000mA;
 
 		rc = smblib_masked_write(smbchg_dev,
 						USBIN_CURRENT_LIMIT_CFG_REG,
