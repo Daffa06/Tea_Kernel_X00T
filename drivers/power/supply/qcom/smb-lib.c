@@ -3473,7 +3473,7 @@ static int SW_recharge(struct smb_charger *chg)
 		pr_err("%s: Couldn't read BATTERY_CHARGER_STATUS_1_REG\n",
 			__func__);
 
-	if ((termination_reg & BATTERY_CHARGER_STATUS_MASK) == 0x05)
+	if ((termination_reg & BATTERY_CHARGER_STATUS_MASK) == 0xF8)
 		termination_done = 1;
 
 	capacity = asus_get_prop_batt_capacity(smbchg_dev);
@@ -3700,7 +3700,7 @@ void jeita_rule(void)
 
 	switch (state) {
 	case JEITA_STATE_LESS_THAN_0:
-		charging_enable = EN_BAT_CHG_EN_COMMAND_FALSE;
+		charging_enable = EN_BAT_CHG_EN_COMMAND_TRUE;
 		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P357;
 		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_1400MA;
 		break;
@@ -3744,7 +3744,7 @@ void jeita_rule(void)
 		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_3000MA;
 		break;
 	case JEITA_STATE_LARGER_THAN_600:
-		charging_enable = EN_BAT_CHG_EN_COMMAND_FALSE;
+		charging_enable = EN_BAT_CHG_EN_COMMAND_TRUE;
 		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P004;
 		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_1500MA;
 		break;
@@ -4096,22 +4096,22 @@ void asus_insertion_initial_settings(struct smb_charger *chg)
 	u8 USBIN_cc;
         flag_repeat = 0;
 
-	/* reg=1060, 0x03, 75mA, gaiwei, 0x06, 150mA */
-	rc = smblib_write(chg, PRE_CHARGE_CURRENT_CFG_REG, 0x06);
+	/* reg=1060, 0x03, 75mA, gaiwei, 0x06, 3000mA */
+	rc = smblib_write(chg, PRE_CHARGE_CURRENT_CFG_REG, 0xF8);
 	if (rc < 0)
 		dev_err(chg->dev,
 			"Couldn't set default PRE_CHARGE_CURRENT_CFG_REG rc=%d\n",
 			rc);
 
-	/* reg=1061, 0x38, 1475mA, gaiwei, 0x28, 1000mA */
-	rc = smblib_write(chg, FAST_CHARGE_CURRENT_CFG_REG, 0x28);
+	/* reg=1061, 0x38, 1475mA, gaiwei, 0x28, 3000mA */
+	rc = smblib_write(chg, FAST_CHARGE_CURRENT_CFG_REG, 0xF8);
 	if (rc < 0)
 		dev_err(chg->dev,
 			"Couldn't set default FAST_CHARGE_CURRENT_CFG_REG rc=%d\n",
 			rc);
 
-	/* reg=1070, 0x74, 4.357v, gaiwei, 0x73, 4.35v */
-	rc = smblib_write(chg, FLOAT_VOLTAGE_CFG_REG, 0x73);
+	/* reg=1070, 0x74, 4.357v, gaiwei, 0xF8, 4.35v */
+	rc = smblib_write(chg, FLOAT_VOLTAGE_CFG_REG, 0xF8);
 	if (rc < 0)
 		dev_err(chg->dev,
 			"Couldn't set default FLOAT_VOLTAGE_CFG_REG rc=%d\n",
@@ -4476,7 +4476,6 @@ irqreturn_t smblib_handle_usb_plugin(int irq, void *data)
 	return IRQ_HANDLED;
 }
 
-#define USB_WEAK_INPUT_UA	1400000
 #define ICL_CHANGE_DELAY_MS	1000
 irqreturn_t smblib_handle_icl_change(int irq, void *data)
 {
@@ -5463,7 +5462,7 @@ irqreturn_t smblib_handle_switcher_power_ok(int irq, void *data)
 						WEAK_CHARGER_VOTER)) {
 			smblib_err(chg,
 				"Weak charger detected: voting %dmA ICL\n",
-				*chg->weak_chg_icl_ua / 1000);
+				*chg->weak_chg_icl_ua / 3000);
 			vote(chg->usb_icl_votable, WEAK_CHARGER_VOTER,
 					true, *chg->weak_chg_icl_ua);
 			/*
