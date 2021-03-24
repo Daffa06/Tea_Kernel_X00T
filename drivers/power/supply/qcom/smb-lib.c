@@ -946,7 +946,7 @@ static int set_sdp_current(struct smb_charger *chg, int icl_ua)
 	const struct apsd_result *apsd_result = smblib_get_apsd_result(chg);
 
 #ifdef CONFIG_FORCE_FAST_CHARGE
-	if (force_fast_charge > 0 && icl_ua == USBIN_500MA)
+	if (force_fast_charge > 0 && icl_ua == USBIN_25MA)
 	{
 		icl_ua = USBIN_900MA;
 	}
@@ -954,16 +954,16 @@ static int set_sdp_current(struct smb_charger *chg, int icl_ua)
 
 	/* power source is SDP */
 	switch (icl_ua) {
-	case USBIN_100MA:
-		/* USB 2.0 100mA */
+	case USBIN_900MA:
+		/* USB 2.0 900mA */
 		icl_options = 0;
 		break;
-	case USBIN_150MA:
-		/* USB 3.0 150mA */
+	case USBIN_900MA:
+		/* USB 3.0 900mA */
 		icl_options = CFG_USB3P0_SEL_BIT;
 		break;
-	case USBIN_500MA:
-		/* USB 2.0 500mA */
+	case USBIN_900MA:
+		/* USB 2.0 900mA */
 		icl_options = USB51_MODE_BIT;
 		break;
 	case USBIN_900MA:
@@ -1044,10 +1044,10 @@ int smblib_set_icl_current(struct smb_charger *chg, int icl_ua)
 	} else {
 		/*
 		 * Try USB 2.0/3,0 option first on USB path when maximum input
-		 * current limit is 500mA or below for better accuracy; in case
+		 * current limit is 900mA or below for better accuracy; in case
 		 * of error, proceed to use USB high-current mode.
 		 */
-		if (icl_ua <= USBIN_500MA) {
+		if (icl_ua <= USBIN_900MA) {
 			rc = set_sdp_current(chg, icl_ua);
 			if (rc >= 0)
 				goto enable_icl_changed_interrupt;
@@ -2908,11 +2908,11 @@ static int __smblib_set_prop_pd_active(struct smb_charger *chg, bool pd_active)
 									rc);
 
 		/*
-		 * Enforce 500mA for PD until the real vote comes in later.
+		 * Enforce 900mA for PD until the real vote comes in later.
 		 * It is guaranteed that pd_active is set prior to
 		 * pd_current_max
 		 */
-		rc = vote(chg->usb_icl_votable, PD_VOTER, true, USBIN_500MA);
+		rc = vote(chg->usb_icl_votable, PD_VOTER, true, USBIN_900MA);
 		if (rc < 0)
 			smblib_err(chg, "Couldn't vote for USB ICL rc=%d\n",
 									rc);
@@ -3701,14 +3701,14 @@ void jeita_rule(void)
 	switch (state) {
 	case JEITA_STATE_LESS_THAN_0:
 		charging_enable = EN_BAT_CHG_EN_COMMAND_TRUE;
-		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P357;
-		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_1400MA;
+		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P385;
+		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_2000MA;
 		break;
 	case JEITA_STATE_RANGE_0_to_100:
 		charging_enable = EN_BAT_CHG_EN_COMMAND_TRUE;
 
 		/* reg=1070 */
-		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P385;
+		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P392;
 
 		/* reg=1061 */
 		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_3000MA;
@@ -3723,7 +3723,7 @@ void jeita_rule(void)
 		charging_enable = EN_BAT_CHG_EN_COMMAND_TRUE;
 
 		/* reg=1070 */
-		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P385;
+		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P392;
 
 		/* reg=1061 */
        		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_3000MA;
@@ -3740,13 +3740,13 @@ void jeita_rule(void)
 		break;
 	case JEITA_STATE_RANGE_500_to_600:
 		charging_enable = EN_BAT_CHG_EN_COMMAND_TRUE;
-		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P385;
+		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P392;
 		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_3000MA;
 		break;
 	case JEITA_STATE_LARGER_THAN_600:
 		charging_enable = EN_BAT_CHG_EN_COMMAND_TRUE;
-		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P004;
-		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_1500MA;
+		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P392;
+		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_2000MA;
 		break;
 	}
 
@@ -3755,7 +3755,7 @@ void jeita_rule(void)
 				smartchg_stop_flag);
 		charging_enable = EN_BAT_CHG_EN_COMMAND_FALSE;
 	}else {
-		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P385;
+		FV_CFG_reg_value = SMBCHG_FLOAT_VOLTAGE_VALUE_4P392;
 		FCC_reg_value = SMBCHG_FAST_CHG_CURRENT_VALUE_3000MA;
 	}
 
@@ -4666,7 +4666,7 @@ static void smblib_handle_hvdcp_check_timeout(struct smb_charger *chg,
 	/* Hold off PD only until hvdcp 2.0 detection timeout */
 	if (rising) {
 		vote(chg->pd_disallowed_votable_indirect, HVDCP_TIMEOUT_VOTER,
-								false, 0);
+								true, 0);
 
 		/* enable HDC and ICL irq for QC2/3 charger */
 		if (qc_charger)
