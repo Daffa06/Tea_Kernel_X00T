@@ -946,7 +946,7 @@ static int set_sdp_current(struct smb_charger *chg, int icl_ua)
 	const struct apsd_result *apsd_result = smblib_get_apsd_result(chg);
 
 #ifdef CONFIG_FORCE_FAST_CHARGE
-	if (force_fast_charge > 0 && icl_ua == USBIN_25MA)
+	if (force_fast_charge > 0 && icl_ua == USBIN_500MA)
 	{
 		icl_ua = USBIN_900MA;
 	}
@@ -962,12 +962,12 @@ static int set_sdp_current(struct smb_charger *chg, int icl_ua)
 		/* USB 3.0 150mA */
 		icl_options = CFG_USB3P0_SEL_BIT;
 		break;
-	case USBIN_900MA:
-		/* USB 2.0 900mA */
+	case USBIN_500MA:
+		/* USB 2.0 500mA */
 		icl_options = USB51_MODE_BIT;
 		break;
-	case USBIN_500MA:
-		/* USB 3.0 500mA */
+	case USBIN_900MA:
+		/* USB 3.0 900mA */
 		icl_options = CFG_USB3P0_SEL_BIT | USB51_MODE_BIT;
 		break;
 	default:
