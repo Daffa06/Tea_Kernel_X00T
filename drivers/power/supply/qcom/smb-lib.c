@@ -4666,7 +4666,7 @@ static void smblib_handle_hvdcp_check_timeout(struct smb_charger *chg,
 	/* Hold off PD only until hvdcp 2.0 detection timeout */
 	if (rising) {
 		vote(chg->pd_disallowed_votable_indirect, HVDCP_TIMEOUT_VOTER,
-								true, 0);
+								false, 0);
 
 		/* enable HDC and ICL irq for QC2/3 charger */
 		if (qc_charger)
