@@ -694,7 +694,6 @@ int LZ4_decompress_fast_usingDict(const char *source, char *dest,
 		dictStart, dictSize);
 }
 
-#ifndef STATIC
 EXPORT_SYMBOL(LZ4_decompress_safe);
 EXPORT_SYMBOL(LZ4_decompress_safe_partial);
 EXPORT_SYMBOL(LZ4_decompress_fast);
